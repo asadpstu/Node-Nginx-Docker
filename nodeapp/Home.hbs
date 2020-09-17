@@ -17,9 +17,16 @@
 
     <!-- Custom styles for this template -->
     <link href="https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
+    
   </head>
 
   <body>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+
 
     <header>
       <!-- Fixed navbar -->
@@ -57,7 +64,10 @@
       <p align="center">Instance port -  <strong>{{ environment.port}}</strong></p><hr>
       <p align="center">
         <div class="buttons">
-          <button class="trigger-push">Trigger Push Notification</button>
+              <div id="token"></div>
+              <div id="msg"></div>
+              <div id="notis"></div>
+              <div id="err"></div>
         </div>
       </p>
     </main>
@@ -68,13 +78,61 @@
       </div>
     </footer>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+        <script>
+        MsgElem = document.getElementById("msg");
+        TokenElem = document.getElementById("token");
+        NotisElem = document.getElementById("notis");
+        ErrElem = document.getElementById("err");
+        // Initialize Firebase
+        // TODO: Replace with your project's customized code snippet
+        var config = {
+          apiKey: "AIzaSyBzh3wW-C3vjA0ARQfy1hWUn5_HSVScuJs",
+          authDomain: "pushnotificationnginxnode.firebaseapp.com",
+          databaseURL: "https://pushnotificationnginxnode.firebaseio.com",
+          projectId: "pushnotificationnginxnode",
+          storageBucket: "pushnotificationnginxnode.appspot.com",
+          messagingSenderId: "769426444179",
+          appId: "1:769426444179:web:31a693ad4f1476ec672266",
+          measurementId: "G-ZTGP9HQ4YX"
+        };
+        firebase.initializeApp(config);
+
+        const messaging_client = firebase.messaging();
+        messaging_client
+            .requestPermission()
+            .then(function () {
+                MsgElem.innerHTML = "Notification permission granted." 
+                console.log("Notification permission granted.");
+                
+                // get the token in the form of promise
+                return messaging_client.getToken()
+            })
+            .then(function(token) {
+                TokenElem.innerHTML = "token is : " + token
+            })
+            .catch(function (err) {
+                ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify.", err);
+            });
+
+        let enableForegroundNotification = true;
+        messaging_client.onMessage(function(payload) {
+            console.log("Message received. ", payload);
+            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
+
+            if(enableForegroundNotification) {
+                const {title, ...options} = JSON.parse(payload.data.notification);
+                navigator.serviceWorker.getRegistrations().then(registration => {
+                    registration[0].showNotification(title, options);
+                });
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
     <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
-    <script src="/js/main.js"></script>
+
+
   </body>
 </html>

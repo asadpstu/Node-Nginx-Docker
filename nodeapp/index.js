@@ -13,12 +13,17 @@ const hbs = require('hbs')
 const webPush = require('web-push');
 const bodyParser = require('body-parser');
 
+//Push notification Admin panel
+var admin = require("firebase-admin");
+
 const dotenv = require('dotenv');
+const { send } = require('process');
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json())
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/'));
 
 // View Engine Setup 
 app.set('views', path.join(__dirname)) 
@@ -155,23 +160,96 @@ MongoClient.connect(dbstring, {useNewUrlParser: true}, function(error, db) {
 
 
 
-//push notification
-const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
-const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
-webPush.setVapidDetails('mailto:test@example.com', publicVapidKey, privateVapidKey);
-app.post('/subscribe', (req, res) => {
-  const subscription = req.body
+ /*
+ Firebase push notification
+ Method :: Post
+ URL    :: https://fcm.googleapis.com/fcm/send
+ Body   ::
+ {
+  "data": {
+    "notification": {
+        "title": "Notification",
+        "body": "Firebase notification implementation",
+        "icon": "/itwonders-web-logo.png"
+    }
+  },
+  "to":"fvteLDXq2xfDj81E3OEMQV:APA91bHQixWBAYJI3-HnQJmBilmt40O3uUx-2nZyreiPQYSMc6Te6Rcx7ofO4Aqn79Vqwzux7HntIBfeiU1m5w6s9pTHEqnBvjN2XnvuYWcj0cpme_ZRB4DGKotH6wK_Qv0mwiiFuXWT"
+ }
 
-  res.status(201).json({});
+ to :: where to find?
+    Application home page 
 
-  const payload = JSON.stringify({
-    title: 'Push notifications with Service Workers',
-  });
+ Header ::  
+   key <serverkey>  Where to find => Project Overview -> Cloud messeging
+   Authorization :: key=AAAAsyVjz5M:APA91bFQqEe0NH0-TjvBLWqUYya5vVT1ZKXeDnLCfDq7MlKGihHqEhsIRYYLjndynzZ1XndbkU0V3gD2rZ8EzQsz1ShyiX1idr8LRo2WljYtABuf1V4uF05U9LeWnuZQl3q-DYIsYOv0
 
-  webPush.sendNotification(subscription, payload)
-    .catch(error => console.error(error));
+*/
+
+
+
+//Push notification from admin
+var serviceAccount = require('./calculation-notification-firebase-adminsdk-d7gob-48af7a7a6e.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://calculation-notification.firebaseio.com"
 });
+
+
+app.post('/send-notification',function(req,res){
+
+
+    var topic = 'general';
+
+    var message = {
+      notification: {
+        title: 'Message from node',
+        body: 'hey there'
+      },
+      topic: topic
+    };
+
+    // Send a message to devices subscribed to the provided topic.
+    admin.messaging().send(message)
+      .then((response) => {
+        // Response is a message ID string.
+        res.send({
+          response
+        });
+      })
+      .catch((error) => {
+        res.send({
+          error
+        });
+    }); 
+   
+});
+
+var topic = 'general';
+
+var message = {
+  notification: {
+    title: 'Message from node',
+    body: 'hey there'
+  },
+  topic: topic
+};
+
+// Send a message to devices subscribed to the provided topic.
+admin.messaging().send(message)
+  .then((response) => {
+    // Response is a message ID string.
+    console.log(response)
+  })
+  .catch((error) => {
+    console.log(error)
+}); 
+
+
+ 
+  
+
 
 
 app.listen(process.env.PORT, () => {
