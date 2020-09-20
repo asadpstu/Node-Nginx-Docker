@@ -6,9 +6,6 @@ services:
 before_install:
     - docker build -t asad183099/nodenginxdocker .
 
-script:
-    - docker run asad183099/nodenginxdocker npm test
-
 after_success:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
