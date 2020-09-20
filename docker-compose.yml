@@ -7,15 +7,15 @@ services:
       context: .
       dockerfile: .docker/nginx.dockerfile
     links:
-      - node1:node1
+      - nodenginxdocker:nodenginxdocker
     depends_on:
-      - node1
+      - nodenginxdocker
     ports:
       - "8080:80"
     networks:
       - app-network
 
-  node1:
+  nodenginxdocker:
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
     ports:
       - "3000"
     environment:
-      - INSTANCE=node1
+      - INSTANCE=nodenginxdocker
       - DATABASE_HOST=mysql
       - MYSQL_HOST=localhost
       - MYSQL_PORT=3306
@@ -87,8 +87,8 @@ services:
     volumes: 
       - mongo-data:/data/db  
     environment:
-      - MONGO_INITDB_ROOT_USERNAME:admin
-      - MONGO_INITDB_ROOT_PASSWORD:password  
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password  
   mongo-express:
     image: mongo-express
     ports: 

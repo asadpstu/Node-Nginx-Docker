@@ -1,0 +1,133 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "nginx",
+            "image": "nginx:latest",
+            "links": [
+                "nodenginxdocker"
+            ]
+        },
+        {
+            "name": "nodenginxdocker",
+            "image": "asad183099/nodenginxdocker",
+            "environment": [
+                {
+                    "name": "INSTANCE",
+                    "value": "nodenginxdocker"
+                },
+                {
+                    "name": "DATABASE_HOST",
+                    "value": "mysql"
+                },
+                {
+                    "name": "MYSQL_HOST",
+                    "value": "localhost"
+                },
+                {
+                    "name": "MYSQL_PORT",
+                    "value": "3306"
+                },
+                {
+                    "name": "MYSQL_USER",
+                    "value": "root"
+                },
+                {
+                    "name": "MYSQL_PASS",
+                    "value": "Asad@183099"
+                },
+                {
+                    "name": "MYSQL_DB",
+                    "value": "classicmodels"
+                },
+                {
+                    "name": "REDIS_HOST",
+                    "value": "redis"
+                },
+                {
+                    "name": "REDIS_PORT",
+                    "value": "6379"
+                },
+                {
+                    "name": "MONGO_HOST",
+                    "value": "mongo"
+                },
+                {
+                    "name": "PUBLIC_VAPID_KEY",
+                    "value": "BGSCTOuz0fZs_oKrqhm9296pFbYKbZHQ87eJSzNVE_M-czHgrRuhMyEjYfnmY1h69ELjUJIiSOc4nkjK4f8yF7U"
+                },
+                {
+                    "name": "PRIVATE_VAPID_KEY",
+                    "value": "f4zajkLiapx5n2_2H67lukCpsY26002Uz_ZrelImrmc"
+                },
+                {
+                    "name": "MYSQL_PASS",
+                    "value": "Asad@183099"
+                },
+                {
+                    "name": "MYSQL_PASS",
+                    "value": "Asad@183099"
+                }
+
+            ],
+            "links": [
+                "redis",
+                "mongo"
+            ],
+            "memory": 500,
+            "essential": true
+        },
+        {
+            "name": "mysql",
+            "image": "mysql:latest",
+            "hostname": "mysql",
+            "environment": [
+                {
+                    "name": "MYSQL_ALLOW_EMPTY_PASSWORD",
+                    "value": true
+                },
+                {
+                    "name": "MYSQL_DATABASE",
+                    "value": "logindb"
+                }
+            ],
+            "memory": 500,
+            "essential": true
+        },
+        {
+            "name": "redis",
+            "image": "redis:latest",
+            "hostname": "redis",
+            "environment": [
+                {
+                    "name": "ALLOW_EMPTY_PASSWORD",
+                    "value": "yes"
+                },
+                {
+                    "name": "DISABLE_COMMANDS",
+                    "value": "FLUSHDB,FLUSHALL,CONFIG"
+                }
+            ],
+            "memory": 128,
+            "essential": true
+        },
+        {
+            "name": "mongo",
+            "image": "mongo:latest",
+            "hostname": "mongo",
+            "environment": [
+                {
+                    "name": "MONGO_INITDB_ROOT_USERNAME",
+                    "value": "admin"
+                },
+                {
+                    "name": "MONGO_INITDB_ROOT_PASSWORD",
+                    "value": "password"
+                }
+            ],
+            "memory": 128,
+            "essential": true
+        }
+
+    ]
+}
