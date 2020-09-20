@@ -2,6 +2,19 @@ version: '2'
 
 services:
 
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx.dockerfile
+    links:
+      - nodenginxdocker:nodenginxdocker
+    depends_on:
+      - nodenginxdocker
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
   nodenginxdocker:
     build:
       context: .
@@ -10,7 +23,7 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - "8888:3000"
+      - "3000"
     environment:
       - INSTANCE=nodenginxdocker
       - DATABASE_HOST=mysql
