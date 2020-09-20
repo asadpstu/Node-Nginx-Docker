@@ -16,13 +16,13 @@ after_success:
 
 deploy:
     edge: true
+    access_key_id: $AWS_ACCESS_KEY
+    secret_acces_key: $AWS_SECRET_KEY
     provider: elasticbeanstalk
     region: ap-southeast-1
     app: nodenginxdocker
     env: Nodenginxdocker-env
-    bucket_name: arn:aws:s3:::elasticbeanstalk-ap-southeast-1-947202945543
+    bucket_name: elasticbeanstalk-ap-southeast-1-947202945543
     bucket_path: nodenginxdocker
     on:
-        branch: master
-    access_key_id: $AWS_ACCESS_KEY
-    secret_acces_key: $AWS_SECRET_KEY    
+        branch: master  
