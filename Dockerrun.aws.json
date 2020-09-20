@@ -2,13 +2,6 @@
     "AWSEBDockerrunVersion": 2,
     "containerDefinitions": [
         {
-            "name": "nginx",
-            "image": "nginx:latest",
-            "links": [
-                "nodenginxdocker"
-            ]
-        },
-        {
             "name": "nodenginxdocker",
             "image": "asad183099/nodenginxdocker",
             "environment": [
@@ -91,7 +84,7 @@
                     "value": "logindb"
                 }
             ],
-            "memory": 500,
+            "memory": 128,
             "essential": true
         },
         {
