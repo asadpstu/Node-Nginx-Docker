@@ -4,6 +4,12 @@
         {
             "name": "nodenginxdocker",
             "image": "asad183099/nodenginxdocker",
+            "portMappings" : [
+                {
+                    "containerPort" : 8888,
+                    "hostPort" : 80
+                }
+            ],
             "environment": [
                 {
                     "name": "INSTANCE",
