@@ -19,7 +19,7 @@ deploy:
     region: ap-south-1
     app: nodenginxdocker
     env: Nodenginxdocker-env
-    bucket_name: elasticbeanstalk-ap-southeast-1-947202945543
+    bucket_name: arn:aws:s3:::elasticbeanstalk-ap-southeast-1-947202945543
     bucket_path: nodenginxdocker
     on:
         branch: master
