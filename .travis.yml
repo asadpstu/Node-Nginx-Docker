@@ -15,6 +15,7 @@ after_success:
     - docker push asad183099/nodenginxdocker
 
 deploy:
+    edge: true
     provider: elasticbeanstalk
     region: ap-southeast-1
     app: nodenginxdocker
